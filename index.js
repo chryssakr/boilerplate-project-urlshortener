@@ -21,6 +21,7 @@ function isValidURL(url) {
     new URL(url);
     return true;
   } catch (error) {
+    console.error('Error validating URL:', error);
     return false;
   }
 }
@@ -41,7 +42,7 @@ app.post('/api/shorturl', (req, res) => {
     });
   } else {
     console.log('Invalid URL:', url);
-    res.status(400).json({ error: 'Invalid URL' });
+    res.status(400).json({ error: 'invalid url' });
   }
 });
 
