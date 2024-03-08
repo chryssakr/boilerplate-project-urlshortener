@@ -7,8 +7,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-
 app.use('/public', express.static(`${process.cwd()}/public`));
+app.use(express.json());
+
+app.use(express.urlencoded({extended:true}))
 
 app.get('/', function(req, res) {
   res.sendFile(process.cwd() + '/views/index.html');
@@ -22,37 +24,27 @@ function isValidURL(url) {
     return false;
   }
 }
-
-app.use(bodyParser.json());
+let counter = 1;
+const urlDatabase = {};
 
 // POST request handler
-app.post('/shorturl', (req, res) => {
+app.post('/api/shorturl', (req, res) => {
   const url = req.body.url;
-
-  app.get('/api/shorturl', function(req, res) {
+  console.log('Received URL:', url);
   
-    if (isValidURL(url)) {
-      res.json({
-        original_url: url,
-        short_url: 1
-      });
-    } else {
-      res.json({ error: 'invalid url' });
-    }
-  });
-
-  app.get('/api/shorturl/<short_url>', function(req, res) {
-
-  })
-
-  // Send a response back to the client
-  res.send('Data received successfully!');
+  if (isValidURL(url)) {
+    const shortUrl = counter;
+    counter++;
+    res.json({
+      original_url: url,
+      short_url: shortUrl
+    });
+  } else {
+    console.log('Invalid URL:', url);
+    res.json({ error: 'invalid url' });
+  }
 });
 
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
 });
-
-
-
-// id: url_input
