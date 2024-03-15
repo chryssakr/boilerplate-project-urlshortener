@@ -45,7 +45,7 @@ app.post('/api/shorturl', (req, res) => {
       short_url: shortUrl
     });
   } else {
-    res.status(400).json({ error: 'invalid url' });
+    res.json({ error: 'invalid url' });
   }
 });
 
